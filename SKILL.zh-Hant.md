@@ -2,7 +2,7 @@
 name: blender-lowpoly
 description: 在 Blender 裡做低模（low-poly）資產時使用，可走 Blender MCP 或撰寫 bpy 腳本（script）。
 metadata:
-  version: "2.3.0"
+  version: "2.5.0"
   type: workflow
   locale: zh-Hant
 ---
@@ -58,6 +58,18 @@ metadata:
 - 用 **材質槽／指定面** 上色（身體、鬃、白章、蹄）。不要圖片貼圖。
 
 做法食譜：[references/lowpoly-build.zh-Hant.md](references/lowpoly-build.zh-Hant.md)
+
+## 反推學到的（馬）
+
+從實測馬 GLB 來的，不要略過。
+
+- **材質（material）不是零件。** 省面馬只有兩個槽，島卻幾乎蓋住整隻。用包圍盒反推會變成兩個大盒子，不是馬。
+- **結構在 mesh 和骨架（armature），上色在後面。** 先側視擋形（身體、頸、頭、四條腿、鬃板、尾板），焊成**一張 mesh**，再把面指定到 2–3 個槽（省面）或 5–8 個槽（較細）。
+- 省面馬：1436 verts、690 tris、2 槽、28 骨。深色槽是鬃／尾／蹄／白章，畫在同一張 mesh 上。
+- 較細馬：4400 verts、2182 tris、8 槽（`Main`、`Hair`、`Main_Dark`、`Muzzle`、`Hooves`、`Main_Light`、`Eye_Black`、`Eye_White`）、50 骨。白馬是同一套 mesh 換色（沒有 `Main_Dark`）。
+- 沒有 UV、沒有貼圖。原點 `(0,0,0)`，蹄在 Z=0。
+- 逐頂點 Idle 倒本（用來對結果，不是做法）：[horse_compact.py](references/scripts/horse_compact.py)、[horse_detailed.py](references/scripts/horse_detailed.py)、[horse_white.py](references/scripts/horse_white.py)。
+
 
 ## 四視圖檢查（必做）
 
