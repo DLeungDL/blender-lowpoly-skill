@@ -96,6 +96,9 @@ print({"origin_world": list(obj.location)})
 
 當**體積**做，不要當雕塑。兩層共用：
 
+**不要用材質包圍盒反推動物。** 省面馬的槽幾乎蓋全身，那條路會變成方塊。先做零件、焊起來，再塗面。用來對結果的 Idle 倒本：`references/scripts/horse_compact.py`、`horse_detailed.py`、`horse_white.py`。
+
+
 1. 先側視：身體盒、頸盒、頭盒、四條腿柱、鬃板、尾板。
 2. 拉頂點讓側輪廓有拱頸、背凹、腿收尖。關節是**折角**，不是加迴圈線。
 3. 3/4：胸和臀加寬，腰略窄（俯視要讀得出來）。
