@@ -1,3 +1,5 @@
+English · [繁體中文](README.zh-Hant.md)
+
 # blender-mcp-skill
 
 A simple LLM skill for making **low-poly** assets in Blender.
@@ -13,6 +15,8 @@ This is a generic guidebook. It does not bind naming, palette, or project style.
 
 ```
 SKILL.md
+SKILL.zh-Hant.md
+README.zh-Hant.md
 references/bpy-recipes.md
 references/agent-protocol.md
 ```

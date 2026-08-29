@@ -6,6 +6,8 @@ metadata:
   type: workflow
 ---
 
+English · [繁體中文](SKILL.zh-Hant.md)
+
 # blender-lowpoly
 
 Guidebook for an LLM making **low-poly** game assets in a live or scripted Blender session.
