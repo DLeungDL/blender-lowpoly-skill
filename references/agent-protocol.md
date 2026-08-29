@@ -1,12 +1,13 @@
-# Agent protocol for Blender MCP
+# Agent protocol for Blender MCP or bpy scripts
 
-Use this when wiring an AI agent (OpenClaw, Grok Bot, or any MCP client) to a live Blender MCP server.
+Use this when wiring an LLM to Blender, either through a live Blender MCP server or by writing a bpy script.
 
 ## What the agent must assume
 
-- The .blend on disk is the source of truth. Tool output is the only scene memory.
-- Multiple clients on `localhost:9876` will collide. One client only.
+- The .blend on disk is the source of truth. Tool output or script prints are the only scene memory.
+- Multiple MCP clients on `localhost:9876` will collide. One client only.
 - Tool names differ by fork. Bind by capability, not by exact string.
+- If MCP tools are missing, write a bpy script instead. Do not pretend MCP is connected.
 
 ## Capability map
 
@@ -20,11 +21,11 @@ Resolve live tools to these roles
 | Run bpy | `execute_blender_code`, `execute_code`, `bm_execute_blender_code` |
 | Optional structured create | `create_object`, `modify_object`, `delete_object` |
 
-If inspect + execute + screenshot exist, the agent can do the full loop. Structured create tools are optional sugar.
+If inspect + execute + screenshot exist, the agent can do the full MCP loop. Structured create tools are optional sugar. If none of these exist, use a bpy script.
 
 ## bpy payload contract
 
-Every execute call
+Every execute call or script
 
 ```python
 import bpy
@@ -50,25 +51,25 @@ Describe the image in the user-facing reply. Do not claim dimensions you did not
 
 | Symptom | Action |
 |---|---|
-| Connection refused / timeout | Stop. Instruct Start MCP Server. |
+| Connection refused / timeout | Stop. Instruct Start MCP Server, or fall back to a bpy script. |
 | `Context` poll / wrong mode | Snippet must set Object Mode and active object. |
-| `KeyError` object name | `get_scene_info`, then use the real name. |
+| `KeyError` object name | `get_scene_info` or a scene snapshot, then use the real name. |
 | Modifier looks missing in engine | Apply modifiers in an export snippet. |
 | Axes flipped in engine | Report export options used; do not silently rotate the user's scene. |
 | User has unsaved work | Do not reload factory / home file. |
 
-## OpenClaw / local agent install
+## Install
 
 Copy this skill folder into the agent's skills directory
 
 ```
-skills/blender-mcp/
+skills/blender-lowpoly/
   SKILL.md
   references/bpy-recipes.md
   references/agent-protocol.md
 ```
 
-Point the agent's MCP config at Blender
+Optional MCP config when using the live-server path
 
 ```json
 {
@@ -86,7 +87,3 @@ Point the agent's MCP config at Blender
 ```
 
 Exact command depends on the installed fork (`uvx blender-mcp`, `npx`, or a local `server.py`). Keep host/port aligned with the BlenderMCP panel.
-
-## User-facing language
-
-When this agent talks to the current user, reply in Traditional Chinese and annotate key terms in English (Low-poly, Modifier, Origin, Shade Flat, Export).

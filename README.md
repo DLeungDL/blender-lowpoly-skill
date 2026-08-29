@@ -1,8 +1,13 @@
 # blender-mcp-skill
 
-AI agent skill for driving a **live Blender** session through **Blender MCP**.
+A simple LLM skill for making **low-poly** assets in Blender.
 
-Target agents: OpenClaw, Grok Bot, or any MCP client that can load `SKILL.md`.
+Two paths:
+
+1. **Blender MCP** if the agent has live MCP tools.
+2. A self-contained **bpy script** if it does not.
+
+This is a generic guidebook. It does not bind naming, palette, or project style.
 
 ## Layout
 
@@ -12,14 +17,14 @@ references/bpy-recipes.md
 references/agent-protocol.md
 ```
 
-Copy the folder as `skills/blender-mcp/` into your agent.
+Copy the folder as `skills/blender-lowpoly/` into your agent.
 
 ## What it encodes
 
-- Connection check (`localhost:9876`, one MCP client)
-- Inspect → small `bpy` chunks → viewport screenshot → export
+- Pick MCP or bpy, not both in one step
+- Inspect → small edit → check → export
 - Low-poly, hard-edge, Shade Flat defaults
-- Naming: `SM_`, `COL_`, `M_`
+- Use the names the user gave
 - Safety: no quit, no home-file wipe, no remote Python
 
 ## MCP config (example)
