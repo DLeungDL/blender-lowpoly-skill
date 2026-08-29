@@ -2,7 +2,7 @@
 name: blender-lowpoly
 description: Use this when making low-poly assets in Blender, either through Blender MCP or by writing a bpy script.
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   type: workflow
 ---
 
@@ -80,7 +80,8 @@ If a view looks like a different object, the silhouette is wrong. Fix verts, do 
 - Origin at ground contact or at the modular tile hinge.
 - Metric units, scale 1.0 unless the open file already differs.
 - Export **selected** as glTF/GLB (FBX only if asked). Report the absolute path.
-- Poly budget unless specified: kit prop 20–400 tris; foliage/rock 80–800; stylized quadruped 500–2500; crowd-filler person 8–20.
+- Poly budget unless specified: kit prop 20–400 tris; foliage/rock 80–800; stylized quadruped **560–1400** tris (measured farm-animal GLBs: Pig 562, Horse 690, Cow 796, Zebra 1354); crowd-filler person 8–20.
+- Stylized animals: **one welded mesh** (not separate limb objects), 2–3 material slots, no UVs/textures. Origin at (0,0,0) with feet on Z=0. Ignore a heavier all-smooth FBX pack if one is sitting next to the GLBs.
 
 ## Naming
 

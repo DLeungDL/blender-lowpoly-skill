@@ -203,14 +203,30 @@ Build as **volumes**, not a sculpt.
 2. Pull verts so the side silhouette has an arched neck, a dip at the back, tapered legs. Joints are **bends**, not extra loops.
 3. 3/4 view: widen chest and haunches, keep the waist slightly narrower (read it from the top view).
 4. Ears = 2–3 triangle prisms. Eyes = one black face or a tiny black material slot. Blaze = white faces down the forehead. Hooves = a tan material on the last faces, not a modeled shoe.
-5. Mane and tail are **separate dark masses**, not hair particles.
-6. Materials: body, mane/tail, blaze, hoof, eye. Shade Flat on everything.
-7. Origin at the hooves / ground.
+5. Mane and tail are **separate dark masses** in the silhouette, but weld them into **one mesh**. Do not leave limbs as separate objects.
+6. Materials: 2–3 slots by face (body, mane/tail, blaze/hoof/eye as needed). No UVs, no image textures.
+7. Shade Flat to match turnaround sheets. Split verts also read faceted if some faces are marked smooth.
+8. Origin at (0,0,0). Feet on Z=0 (within a few centimeters). Apply rotation/scale.
 
-Gallop (only if asked): duplicate the mesh or pose an armature with **four named holds** — `gathered`, `extended`, `airborne`, `landing`. Rotate whole-limb bones. Do not add topology for deformation.
+**Measured GLB farm pack** (style target for animals). All triangles, one mesh + optional armature:
 
-Do not: Auto Smooth, Subdivision, image fillies, nostril cavities, individual hairs.
+| Model | Verts | Tris | Slots | Bones |
+|---|---:|---:|---:|---:|
+| Pig | 1158 | 562 | 2 | 24 |
+| Sheep | 1262 | 610 | 2 | 24 |
+| Pug | 1284 | 644 | 2 | 24 |
+| Llama | 1365 | 661 | 3 | 24 |
+| Horse | 1436 | 690 | 2 | 28 |
+| Cow | 1644 | 796 | 3 | 28 |
+| Zebra | 2776 | 1354 | 2 | 28 |
 
+Stay in **560–1400 tris**. 24 bones (no tail) or 28 (Tail1–4). Optional clips: Idle, Jump; larger set adds Walk, WalkSlow, Run, Death.
+
+A companion **FBX** zip of similar animals is a different pack: ~1800–2500 tris, all-smooth quads, 50–70 IK bones, Principled Alpha=0 on import. Do not copy its budget, shade, or rig.
+
+Gallop (only if asked): four named holds — `gathered`, `extended`, `airborne`, `landing`. Rotate whole-limb bones. Do not add topology for deformation.
+
+Do not: Subdivision, image textures, nostril cavities, individual hairs, separate limb objects.
 ---
 
 ## Color
