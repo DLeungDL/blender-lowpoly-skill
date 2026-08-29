@@ -2,7 +2,7 @@
 name: blender-lowpoly
 description: 在 Blender 裡做低模（low-poly）資產時使用，可走 Blender MCP 或撰寫 bpy 腳本（script）。
 metadata:
-  version: "2.2.0"
+  version: "2.3.0"
   type: workflow
   locale: zh-Hant
 ---
@@ -81,8 +81,11 @@ metadata:
 - 原點（origin）放在接地處，或模組拼接的鉸鏈。
 - 公制單位，縮放 1.0（開著的檔案若已不同則跟隨檔案）。
 - 只匯出**選取物**為 glTF/GLB（有要求才用 FBX）。回報絕對路徑。
-- 未指定面數時：組件道具 20–400 tris；葉子／石頭 80–800；風格化四足 **560–1400** tris（實測農場動物 GLB：豬 562、馬 690、牛 796、斑馬 1354）；人潮填充 8–20。
-- 風格化動物：**一張焊在一起的 mesh**（不要把四肢拆成獨立物件），2–3 個材質槽，沒有 UV／貼圖。原點在 (0,0,0)，蹄在 Z=0。若旁邊有一套較重、全光滑的 FBX，不要拿來當面數或做法。
+- 未指定面數時：組件道具 20–400 tris；葉子／石頭 80–800；人潮填充 8–20。
+- 風格化動物：**一張焊在一起的 mesh**，沒有 UV／貼圖，原點 (0,0,0)，蹄在 Z=0。兩種層級，選一種並說出來：
+  - **省面（compact）：** 560–1400 tris，2–3 個材質槽，24 或 28 根骨。Idle / Jump / Walk / Run。
+  - **較細（detailed）：** 1800–2500 tris，5–8 個槽（Main、Main_Light、Hair、Hooves、Muzzle、Eyes），約 42–51 根骨。Gallop、Eating、Attack、額外 Idle。
+  沒指定就走省面。使用者要 Gallop／攻擊／眼睛蹄嘴分色時才走較細。同一套模型優先用 **GLB**，不要用 FBX（FBX 匯入時常 Principled Alpha=0）。
 
 ## 命名（naming）
 

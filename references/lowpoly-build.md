@@ -195,20 +195,24 @@ print({"trunk": trunk.name, "foliage": names})
 4. One sage material. Shade Flat. The triangles **are** the surface detail.
 5. Do not texture moss. Do not add a particle system.
 
-### Stylized quadruped (horse)
+### Stylized quadruped (two tiers)
 
-Build as **volumes**, not a sculpt.
+Build as **volumes**, not a sculpt. Shared for both tiers:
 
 1. Side view first: body box, neck box, head box, four leg prisms, mane slab, tail slab.
 2. Pull verts so the side silhouette has an arched neck, a dip at the back, tapered legs. Joints are **bends**, not extra loops.
 3. 3/4 view: widen chest and haunches, keep the waist slightly narrower (read it from the top view).
-4. Ears = 2–3 triangle prisms. Eyes = one black face or a tiny black material slot. Blaze = white faces down the forehead. Hooves = a tan material on the last faces, not a modeled shoe.
-5. Mane and tail are **separate dark masses** in the silhouette, but weld them into **one mesh**. Do not leave limbs as separate objects.
-6. Materials: 2–3 slots by face (body, mane/tail, blaze/hoof/eye as needed). No UVs, no image textures.
-7. Shade Flat to match turnaround sheets. Split verts also read faceted if some faces are marked smooth.
-8. Origin at (0,0,0). Feet on Z=0 (within a few centimeters). Apply rotation/scale.
+4. Ears = 2–3 triangle prisms. Weld **everything into one mesh**. Do not leave limbs as objects.
+5. No UVs, no image textures. Origin at (0,0,0). Feet on Z=0. Apply rotation/scale.
+6. Shade Flat to match turnaround sheets. Split verts also read faceted if some faces are marked smooth.
 
-**Measured GLB farm pack** (style target for animals). All triangles, one mesh + optional armature:
+Pick **compact** or **detailed** and say which. Default compact. Use detailed when the user wants Gallop / Attack / Eating, or separate colors for eyes, hooves, muzzle, and hair.
+
+#### Compact (560–1400 tris)
+
+2–3 material slots (body, mane/tail, blaze/hoof/eye as needed). 24 bones (no tail) or 28 (Tail1–4). Clips: Idle, Jump; larger compact set adds Walk, WalkSlow, Run, Death.
+
+Measured compact GLBs:
 
 | Model | Verts | Tris | Slots | Bones |
 |---|---:|---:|---:|---:|
@@ -220,11 +224,21 @@ Build as **volumes**, not a sculpt.
 | Cow | 1644 | 796 | 3 | 28 |
 | Zebra | 2776 | 1354 | 2 | 28 |
 
-Stay in **560–1400 tris**. 24 bones (no tail) or 28 (Tail1–4). Optional clips: Idle, Jump; larger set adds Walk, WalkSlow, Run, Death.
+#### Detailed (1800–2500 tris)
 
-A companion **FBX** zip of similar animals is a different pack: ~1800–2500 tris, all-smooth quads, 50–70 IK bones, Principled Alpha=0 on import. Do not copy its budget, shade, or rig.
+5–8 slots, typically `Main`, `Main_Light`, `Main_Dark`, `Hair`, `Hooves`, `Muzzle`, `Eye_Black`, `Eye_White`. Eyes and hooves are extra faces on the same mesh, not separate objects. ~42–51 bones. Clips include Idle, Idle_2, Walk, Gallop, Gallop_Jump, Eating, Attack_Headbutt / Attack_Kick, Death, hit reacts.
 
-Gallop (only if asked): four named holds — `gathered`, `extended`, `airborne`, `landing`. Rotate whole-limb bones. Do not add topology for deformation.
+Measured detailed GLBs (same mesh as the large FBX zip; prefer GLB):
+
+| Model | Verts | Tris | Slots | Bones | Actions |
+|---|---:|---:|---:|---:|---:|
+| Fox | 3752 | 1848 | 5 | 51 | 24 |
+| Horse | 4400 | 2182 | 8 | 50 | 26 |
+| Cow | 4970 | 2450 | 7 | 42 | 25 |
+
+The FBX of this pack is the same topology with a worse import (all-smooth quads, Principled Alpha=0, extra IK bones). If both files exist, open the GLB.
+
+Gallop holds if the user wants a sheet not a clip: `gathered`, `extended`, `airborne`, `landing`. Rotate whole-limb bones. Do not add topology for deformation.
 
 Do not: Subdivision, image textures, nostril cavities, individual hairs, separate limb objects.
 ---
