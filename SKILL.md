@@ -2,7 +2,7 @@
 name: blender-lowpoly
 description: Use this when making low-poly assets in Blender, either through Blender MCP or by writing a bpy script.
 metadata:
-  version: "2.3.0"
+  version: "2.5.0"
   type: workflow
 ---
 
@@ -57,6 +57,18 @@ Large visible tris/quads. Shade Flat so lighting breaks on every face. Used for 
 - Color by **material slot / face assignment** (body, mane, blaze, hoof). No image textures.
 
 Recipes: [references/lowpoly-build.md](references/lowpoly-build.md)
+
+## Reverse-engineering lesson (horses)
+
+Measured horse GLBs taught this. Do not skip it.
+
+- **Materials are not parts.** Compact Horse has two slots whose islands span almost the whole animal. Bounding-box reverse-eng from slots produces two giant cubes, not a horse.
+- **Anatomy lives in the mesh and bones**, then you paint slots. Side-view volumes first (body, neck, head, four legs, mane slab, tail slab). Weld to **one mesh**. Then assign faces to 2–3 (compact) or 5–8 (detailed) slots.
+- Compact Horse: 1436 verts, 690 tris, 2 slots, 28 bones. Dark slot is mane / tail / hooves / blaze painted across the same mesh.
+- Detailed Horse: 4400 verts, 2182 tris, 8 slots (`Main`, `Hair`, `Main_Dark`, `Muzzle`, `Hooves`, `Main_Light`, `Eye_Black`, `Eye_White`), 50 bones. White Horse is the same mesh with different albedo (no `Main_Dark`).
+- No UVs, no image textures. Origin `(0,0,0)`, feet on Z=0.
+- Exact Idle-pose dumps (ground truth, not a modeling recipe): [horse_compact.py](references/scripts/horse_compact.py), [horse_detailed.py](references/scripts/horse_detailed.py), [horse_white.py](references/scripts/horse_white.py). Use them to check a result, not as the way to build.
+
 
 ## Four-view check (required)
 
