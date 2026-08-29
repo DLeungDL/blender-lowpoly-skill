@@ -17,6 +17,8 @@
 SKILL.md
 SKILL.zh-Hant.md
 README.zh-Hant.md
+references/lowpoly-build.md
+references/lowpoly-build.zh-Hant.md
 references/bpy-recipes.md
 references/agent-protocol.md
 ```
@@ -28,8 +30,10 @@ references/agent-protocol.md
 ## 它規定了什麼
 
 - 一次只走 MCP 或 bpy，不要混用
-- 先檢查（inspect）→ 小改 → 核對（check）→ 匯出（export）
-- 預設：低模、硬邊（hard-edge）、Shade Flat
+- 兩種做法：組件（kit，方塊 + Array）或稜面有機（faceted organic）
+- 四視圖檢查（front、side、3/4、top）
+- 先檢查 → 擋形 → 核對 → Shade Flat 分件上色 → 匯出
+- 預設：低模、硬邊、Shade Flat、沒有圖片貼圖
 - 名稱跟使用者說的走
 - 安全：不准退出 Blender、不准清掉未存場景、不准從遠端抓 Python
 

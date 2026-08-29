@@ -17,6 +17,8 @@ This is a generic guidebook. It does not bind naming, palette, or project style.
 SKILL.md
 SKILL.zh-Hant.md
 README.zh-Hant.md
+references/lowpoly-build.md
+references/lowpoly-build.zh-Hant.md
 references/bpy-recipes.md
 references/agent-protocol.md
 ```
@@ -26,8 +28,10 @@ Copy the folder as `skills/blender-lowpoly/` into your agent.
 ## What it encodes
 
 - Pick MCP or bpy, not both in one step
-- Inspect → small edit → check → export
-- Low-poly, hard-edge, Shade Flat defaults
+- Two build languages: kit (cubes + Array) or faceted organic
+- Four-view check (front, side, 3/4, top)
+- Inspect → blockout → check → shade flat + color slots → export
+- Low-poly, hard-edge, Shade Flat, no image textures
 - Use the names the user gave
 - Safety: no quit, no home-file wipe, no remote Python
 

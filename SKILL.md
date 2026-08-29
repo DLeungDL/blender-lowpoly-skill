@@ -2,7 +2,7 @@
 name: blender-lowpoly
 description: Use this when making low-poly assets in Blender, either through Blender MCP or by writing a bpy script.
 metadata:
-  version: "2.0.0"
+  version: "2.1.0"
   type: workflow
 ---
 
@@ -11,6 +11,8 @@ English · [繁體中文](SKILL.zh-Hant.md)
 # blender-lowpoly
 
 Guidebook for an LLM making **low-poly** game assets in a live or scripted Blender session.
+
+The look to hit: **visible facets, Shade Flat, solid colors, no PBR textures**. Build from primitives. Check with a four-view turnaround (front, side, 3/4, top).
 
 ## Path
 
@@ -23,24 +25,62 @@ Do not mix the two in one step. Say which path you are using.
 
 ```
 inspect scene
-  → plan names, poly budget, origin, units
-  → small edit (one intent)
-  → check (screenshot or printed counts)
-  → export
+  → pick construction language (kit OR faceted-organic)
+  → blockout from primitives (silhouette first)
+  → four-view check
+  → shade flat + color slots
+  → origin, apply rot/scale, export
 ```
 
 Never invent scene state. Only trust tool output or script prints.
 
+## Two construction languages
+
+Pick one per asset. Do not mix in the same mesh.
+
+### A. Kit (hard-edge primitives)
+
+Cubes and cylinders, **no bevel**, **no subdivision**, **no vertex jitter**. Repeat with Array. Used for rails, posts, stadiums, crowd-as-blocks, boxes.
+
+- One cube = one part.
+- Posts / crowd / repeating bays: Array modifier, then apply only at export if the engine will not evaluate it.
+- 2–4 material slots. Color whole objects, not faces, unless two colors share one mesh.
+
+### B. Faceted organic
+
+Large visible tris/quads. Shade Flat so lighting breaks on every face. Used for trees, hedges, rocks, stylized animals.
+
+- Start from a cube, cone, or 6–8 sided cylinder. Not a high-poly sphere you then decimate as the first idea.
+- Silhouette from the **side view** first, then add volume in 3/4.
+- Vertex jitter only on foliage / rocks (small, uniform). Never jitter kit parts.
+- Anatomy is planes and angle changes (knee = a bend), not extra edge loops.
+- Color by **material slot / face assignment** (body, mane, blaze, hoof). No image textures.
+
+Recipes: [references/lowpoly-build.md](references/lowpoly-build.md)
+
+## Four-view check (required)
+
+After blockout and after materials, screenshot or print so these four read clearly:
+
+| View | What to verify |
+|---|---|
+| front | symmetry, width, color splits (blaze, posts) |
+| side | silhouette, taper, joint angles, overhangs |
+| 3/4 | volume, facet lighting, parts not intersecting |
+| top | footprint, array spacing, nested foliage tiers |
+
+If a view looks like a different object, the silhouette is wrong. Fix verts, do not add loops.
+
 ## Defaults (unless the user overrides)
 
-- Low-poly, hard edges, **Shade Flat**. No Auto Smooth.
-- Quads while modeling. Triangulate only at export if the engine needs it.
+- Low-poly, hard edges, **Shade Flat**. No Auto Smooth. No Subdivision Surface.
+- Quads while blocking kit parts. Faceted organic may be tris; that is the look.
 - Silhouette from geometry. No extra loops on flat planes.
-- Flat color materials (Principled or Emission). No PBR stack.
-- Origin at ground contact or hinge.
+- Flat Principled (roughness 1, metallic 0) or Emission. No PBR stack, no image textures.
+- Origin at ground contact or at the modular tile hinge.
 - Metric units, scale 1.0 unless the open file already differs.
 - Export **selected** as glTF/GLB (FBX only if asked). Report the absolute path.
-- Poly budget unless specified: small prop 300–1500 tris, hero prop 2–5k.
+- Poly budget unless specified: kit prop 20–400 tris; foliage/rock 80–800; stylized quadruped 500–2500; crowd-filler person 8–20.
 
 ## Naming
 
@@ -54,7 +94,7 @@ Use the names the user gave. If none, pick clear English names and say what you 
 - Return a short dict (names, counts, paths). Never dump vertex arrays.
 - After Edit Mode ops, return to Object Mode in the same snippet.
 - Set the object selected and active before object ops.
-- Screenshot after each meaningful visual change.
+- Screenshot after each meaningful visual change. Prefer a four-view sheet for the final check.
 - Tool names vary by fork (`bm_` prefix, `execute_code`, …). Bind by capability, not exact string.
 
 ## bpy script rules
@@ -71,9 +111,10 @@ Use the names the user gave. If none, pick clear English names and say what you 
 
 ## Report back
 
+- Construction language used (kit or faceted-organic)
 - Objects created or changed
 - Approx verts / faces
 - Material names and colors
 - Export path if any
-- What the last screenshot or print shows
+- What the four-view sheet shows (silhouette / obvious errors)
 - One next-step suggestion
