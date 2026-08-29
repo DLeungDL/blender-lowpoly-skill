@@ -199,6 +199,9 @@ print({"trunk": trunk.name, "foliage": names})
 
 Build as **volumes**, not a sculpt. Shared for both tiers:
 
+**Do not reverse-eng animals by material bounding boxes.** Compact horse slots span the whole body; that path yields cubes. Build parts, weld, then paint faces. Exact Idle dumps for checking: `references/scripts/horse_compact.py`, `horse_detailed.py`, `horse_white.py`.
+
+
 1. Side view first: body box, neck box, head box, four leg prisms, mane slab, tail slab.
 2. Pull verts so the side silhouette has an arched neck, a dip at the back, tapered legs. Joints are **bends**, not extra loops.
 3. 3/4 view: widen chest and haunches, keep the waist slightly narrower (read it from the top view).
