@@ -2,7 +2,7 @@
 name: blender-lowpoly
 description: 在 Blender 裡做低模（low-poly）資產時使用，可走 Blender MCP 或撰寫 bpy 腳本（script）。
 metadata:
-  version: "2.5.0"
+  version: "2.6.0"
   type: workflow
   locale: zh-Hant
 ---
@@ -70,6 +70,18 @@ metadata:
 - 沒有 UV、沒有貼圖。原點 `(0,0,0)`，蹄在 Z=0。
 - 逐頂點 Idle 倒本（用來對結果，不是做法）：[horse_compact.py](references/scripts/horse_compact.py)、[horse_detailed.py](references/scripts/horse_detailed.py)、[horse_white.py](references/scripts/horse_white.py)。
 
+
+
+## 蒸餾，不要倒本
+
+反推（reverse-eng）減面後的 AI mesh 是**知識蒸餾（knowledge distillation）**，不是逐頂點複製。
+
+- 提煉 DNA：比例、基本體、圓角、單色、原點。出貨**參數化** bpy（`length`、`width`、`height`、`corner`、`jitter`）。
+- **不要** subsurf + collapse + fractal 去還原無序三角。那是在複製雜訊。
+- 外觀對照 mesh（521 面不規則樹籬）只給四視圖比對。做法是 [hedge.py](references/scripts/hedge.py)。
+- 和馬同一條：Idle 逐頂點倒本用來對結果，不是做法。
+
+樹籬 DNA：一個方塊，縮放約 2.8 × 0.95 × 1.1，bevel 圓角 0.2／3 段，沿法線小幅 jitter，三角化，一個 sage 槽 `(0.40, 0.46, 0.28)`，Shade Flat，無 UV，原點 `(0,0,0)`，底在 Z=0。
 
 ## 四視圖檢查（必做）
 

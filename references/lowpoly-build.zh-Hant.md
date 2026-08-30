@@ -86,10 +86,14 @@ print({"origin_world": list(obj.location)})
 
 ### 綠籬／切面塊
 
-1. 方塊拉成長塊。
-2. 切幾刀讓輪廓用**切面**變圓（小 bevel 或一次 subdivide，再三角化）。
-3. 可把頂點輕輕挪一下，讓邊不規則，不要做成 CAD 圓角。
-4. 一個灰綠材質。Shade Flat。三角形**就是**表面細節。
+蒸餾成**參數化長圓角盒**，不要 collapse 複製減面 mesh。做法：[hedge.py](scripts/hedge.py)。
+
+旋鈕：`length` 2.8、`width` 0.95、`height` 1.1、`corner` 0.2、`segments` 3、`jitter` 0.018、sage `(0.40, 0.46, 0.28, 1)`。
+
+1. 方塊縮放到長寬高，底放在 Z=0。
+2. 全邊 bevel（`corner`、`segments`），讓輪廓用**切面**變圓。
+3. 沿法線小幅 jitter（旋鈕）。不要 subsurf+collapse。
+4. 三角化。一個灰綠材質。Shade Flat。原點 `(0,0,0)`。
 5. 不要貼青苔圖。不要粒子系統。
 
 ### 風格化四足（兩種層級）

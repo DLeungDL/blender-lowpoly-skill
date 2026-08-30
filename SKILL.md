@@ -2,7 +2,7 @@
 name: blender-lowpoly
 description: Use this when making low-poly assets in Blender, either through Blender MCP or by writing a bpy script.
 metadata:
-  version: "2.5.0"
+  version: "2.6.0"
   type: workflow
 ---
 
@@ -69,6 +69,18 @@ Measured horse GLBs taught this. Do not skip it.
 - No UVs, no image textures. Origin `(0,0,0)`, feet on Z=0.
 - Exact Idle-pose dumps (ground truth, not a modeling recipe): [horse_compact.py](references/scripts/horse_compact.py), [horse_detailed.py](references/scripts/horse_detailed.py), [horse_white.py](references/scripts/horse_white.py). Use them to check a result, not as the way to build.
 
+
+
+## Distill, don't dump
+
+Reverse-eng a decimated AI mesh is **knowledge distillation**, not a vertex copy.
+
+- Extract DNA: proportions, primitive, corner, one color, origin. Ship **parameterized** bpy (`length`, `width`, `height`, `corner`, `jitter`).
+- Do **not** subsurf + collapse + fractal to recreate unordered tris. That copies noise.
+- A look-check mesh (the irregular 521-face hedge) is for four-view comparison. The recipe is [hedge.py](references/scripts/hedge.py).
+- Same rule as horses: Idle vertex dumps check a result; they are not how you model.
+
+Hedge DNA: one cube, scale ~2.8 × 0.95 × 1.1, bevel corner 0.2 / 3 segments, tiny along-normal jitter, triangulate, one sage slot `(0.40, 0.46, 0.28)`, Shade Flat, no UV, origin `(0,0,0)`, sit on Z=0.
 
 ## Four-view check (required)
 

@@ -74,3 +74,11 @@ Also inspected (no reconstruction script): compact Llama, Pug, Zebra.
   Muzzle, Hooves, Eye_Black, Eye_White — placed at measured centroids/bboxes.
 - Do not dump raw vertex arrays from the GLB into these scripts. Tweak the
   primitive sizes if a silhouette is off.
+
+## Props (distilled)
+
+| Script | DNA | Knobs |
+|---|---|---|
+| `hedge.py` | rounded oblong, 1 sage slot, Shade Flat | length, width, height, corner, segments, jitter |
+
+Hedge is parameterized geometry, not a GLB vertex clone. Do not subsurf+collapse to copy a decimated AI mesh.

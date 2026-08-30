@@ -189,10 +189,14 @@ print({"trunk": trunk.name, "foliage": names})
 
 ### Hedge / faceted block
 
-1. Cube, scale to an oblong.
-2. Inset enough cuts to round the silhouette **with facets** (a small bevel or one subdivide, then triangulate).
-3. Optional: displace verts a little so edges are irregular, not a CAD fillet.
-4. One sage material. Shade Flat. The triangles **are** the surface detail.
+Distill to a **parameterized rounded oblong**, do not collapse-copy a decimated mesh. Recipe: [hedge.py](scripts/hedge.py).
+
+Knobs: `length` 2.8, `width` 0.95, `height` 1.1, `corner` 0.2, `segments` 3, `jitter` 0.018, sage `(0.40, 0.46, 0.28, 1)`.
+
+1. Cube, scale to length/width/height, sit on Z=0.
+2. Bevel all edges (`corner`, `segments`) so the silhouette rounds **with facets**.
+3. Tiny along-normal jitter (a knob). Not subsurf+collapse.
+4. Triangulate. One sage material. Shade Flat. Origin `(0,0,0)`.
 5. Do not texture moss. Do not add a particle system.
 
 ### Stylized quadruped (two tiers)

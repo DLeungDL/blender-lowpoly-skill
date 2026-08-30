@@ -27,6 +27,7 @@ Copy the folder as `skills/blender-lowpoly/` into your agent.
 
 ## What it encodes
 
+- Distill decimated AI meshes to parameterized bpy; do not dump unordered tris
 - Pick MCP or bpy, not both in one step
 - Two build languages: kit (cubes + Array) or faceted organic
 - Four-view check (front, side, 3/4, top)

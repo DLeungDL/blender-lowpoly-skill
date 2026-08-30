@@ -30,6 +30,7 @@ references/agent-protocol.md
 ## 它規定了什麼
 
 - 一次只走 MCP 或 bpy，不要混用
+- 把減面後的 AI mesh 蒸餾成參數化 bpy，不要倒無序三角
 - 兩種做法：組件（kit，方塊 + Array）或稜面有機（faceted organic）
 - 四視圖檢查（front、side、3/4、top）
 - 先檢查 → 擋形 → 核對 → Shade Flat 分件上色 → 匯出
