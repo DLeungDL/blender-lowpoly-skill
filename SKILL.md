@@ -75,12 +75,12 @@ Measured horse GLBs taught this. Do not skip it.
 
 Reverse-eng a decimated AI mesh is **knowledge distillation**, not a vertex copy.
 
-- Extract DNA: proportions, primitive, corner, one color, origin. Ship **parameterized** bpy (`length`, `width`, `height`, `corner`, `jitter`).
-- Do **not** subsurf + collapse + fractal to recreate unordered tris. That copies noise.
-- A look-check mesh (the irregular 521-face hedge) is for four-view comparison. The recipe is [hedge.py](references/scripts/hedge.py).
+- Extract DNA as a **parameterized procedure** (knobs), not a vertex array and not the cleanest CAD cube that still reads as the object.
+- For this hedge the look *is* irregular tris. Knobs include `collapse_faces` and `fractal`. A cube+bevel-only mesh is too clean.
+- Still do **not** dump GLB verts. [hedge.py](references/scripts/hedge.py) rebuilds the look from knobs (~292 verts / 521 faces).
 - Same rule as horses: Idle vertex dumps check a result; they are not how you model.
 
-Hedge DNA: one cube, scale ~2.8 × 0.95 × 1.1, bevel corner 0.2 / 3 segments, tiny along-normal jitter, triangulate, one sage slot `(0.40, 0.46, 0.28)`, Shade Flat, no UV, origin `(0,0,0)`, sit on Z=0.
+Hedge DNA: cube scale ~2.8 × 0.95 × 1.1, bevel 0.2 / 4, subsurf 2, displace 0.028, collapse toward 200 faces, fractal 0.28 on leftover large faces, sage `(0.40, 0.46, 0.28)`, Shade Flat, no UV, origin `(0,0,0)`, sit on Z=0.
 
 ## Four-view check (required)
 

@@ -189,15 +189,15 @@ print({"trunk": trunk.name, "foliage": names})
 
 ### Hedge / faceted block
 
-Distill to a **parameterized rounded oblong**, do not collapse-copy a decimated mesh. Recipe: [hedge.py](scripts/hedge.py).
+Parameterized **procedure**. The look is irregular tris (~292 v / 521 f), not a CAD bevel. Recipe: [hedge.py](scripts/hedge.py).
 
-Knobs: `length` 2.8, `width` 0.95, `height` 1.1, `corner` 0.2, `segments` 3, `jitter` 0.018, sage `(0.40, 0.46, 0.28, 1)`.
+Knobs: `length` 2.8, `width` 0.95, `height` 1.1, `corner` 0.2, `segments` 4, `subsurf` 2, `displace` 0.028, `collapse_faces` 200, `fractal` 0.28, sage `(0.40, 0.46, 0.28, 1)`.
 
-1. Cube, scale to length/width/height, sit on Z=0.
-2. Bevel all edges (`corner`, `segments`) so the silhouette rounds **with facets**.
-3. Tiny along-normal jitter (a knob). Not subsurf+collapse.
-4. Triangulate. One sage material. Shade Flat. Origin `(0,0,0)`.
-5. Do not texture moss. Do not add a particle system.
+1. Cube, scale, sit on Z=0, bevel corners.
+2. Subsurf then displace then **collapse** (this is a knob, not noise-copy).
+3. Fractal-subdivide leftover large faces, triangulate.
+4. One sage material. Shade Flat. Origin `(0,0,0)`.
+5. Do not texture moss. Do not dump GLB verts. Do not add a particle system.
 
 ### Stylized quadruped (two tiers)
 

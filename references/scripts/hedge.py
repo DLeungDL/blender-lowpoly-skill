@@ -1,23 +1,29 @@
-"""Parameterized low-poly hedge (distilled DNA, not a vertex dump).
+"""Parameterized low-poly hedge.
 
-Cube -> scale(length, width, height) -> sit on Z=0 -> bevel corners ->
-optional along-normal jitter -> triangulate -> Shade Flat -> one sage slot.
+DNA is a *procedure with knobs*, not a vertex dump and not a CAD cube.
+Look target: irregular tris, Shade Flat, one sage slot (~292 v / 521 f).
 
-Do not subsurf+collapse to copy a decimated AI mesh. Tune the knobs.
+Cube -> scale -> bevel -> subsurf -> displace -> collapse -> fractal large faces.
+Tune LENGTH/WIDTH/HEIGHT/CORNER/COLLAPSE_FACES/DISPLACE/FRACTAL. Do not paste GLB verts.
 """
 import bpy
-import bmesh
 import random
 
 LENGTH = 2.80
 WIDTH = 0.95
 HEIGHT = 1.10
 CORNER = 0.20
-SEGMENTS = 3
-JITTER = 0.018
+SEGMENTS = 4
+SUBSURF = 2
+DISPLACE = 0.028
+NOISE_SCALE = 0.55
+COLLAPSE_FACES = 200
+FRACTAL = 0.28
+FRACTAL_NORMAL = 0.45
+FRACTAL_AREA = 0.08
+FRACTAL_SEED = 11
 COLOR = (0.40, 0.46, 0.28, 1.0)
 NAME = "Hedge"
-SEED = 7
 COLLECTION = "REF_Hedge"
 
 
@@ -45,68 +51,94 @@ def ensure_collection(name):
     return col
 
 
+def sit_on_ground(mesh, eps=0.015):
+    minz = min(v.co.z for v in mesh.vertices)
+    for v in mesh.vertices:
+        v.co.z -= minz
+        if v.co.z < eps:
+            v.co.z = 0.0
+    mesh.update()
+
+
 def make_hedge(
     length=LENGTH,
     width=WIDTH,
     height=HEIGHT,
     corner=CORNER,
     segments=SEGMENTS,
-    jitter=JITTER,
+    subsurf=SUBSURF,
+    displace=DISPLACE,
+    collapse_faces=COLLAPSE_FACES,
+    fractal=FRACTAL,
     color=COLOR,
     name=NAME,
-    seed=SEED,
 ):
     col = ensure_collection(COLLECTION)
-    mesh = bpy.data.meshes.new(name)
-    obj = bpy.data.objects.new(name, mesh)
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, 0.0, 0.0))
+    obj = bpy.context.active_object
+    obj.name = name
+    obj.scale = (length, width, height)
+    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+
+    # Move into the REF collection only.
+    for c in list(obj.users_collection):
+        c.objects.unlink(obj)
     col.objects.link(obj)
-    if obj.name not in bpy.context.scene.collection.objects:
-        pass
 
-    bm = bmesh.new()
-    bmesh.ops.create_cube(bm, size=1.0)
-    for v in bm.verts:
-        v.co.x *= length
-        v.co.y *= width
-        v.co.z *= height
-    minz = min(v.co.z for v in bm.verts)
-    for v in bm.verts:
-        v.co.z -= minz
+    bev = obj.modifiers.new("Bevel", "BEVEL")
+    bev.width = corner
+    bev.segments = segments
+    bev.affect = "EDGES"
+    bev.limit_method = "NONE"
+    bpy.ops.object.modifier_apply(modifier="Bevel")
 
-    corner = min(corner, width * 0.45, height * 0.45, length * 0.45)
-    bm.edges.ensure_lookup_table()
-    bmesh.ops.bevel(
-        bm,
-        geom=list(bm.edges),
-        offset=corner,
-        offset_type="OFFSET",
-        segments=segments,
-        affect="EDGES",
-        clamp_overlap=True,
+    sub = obj.modifiers.new("Subsurf", "SUBSURF")
+    sub.levels = subsurf
+    sub.render_levels = subsurf
+    sub.subdivision_type = "CATMULL_CLARK"
+    bpy.ops.object.modifier_apply(modifier="Subsurf")
+
+    tex = bpy.data.textures.get("HedgeNoise") or bpy.data.textures.new("HedgeNoise", "CLOUDS")
+    tex.noise_scale = NOISE_SCALE
+    tex.noise_depth = 2
+    disp = obj.modifiers.new("Disp", "DISPLACE")
+    disp.strength = displace
+    disp.mid_level = 0.5
+    disp.texture = tex
+    disp.texture_coords = "LOCAL"
+    bpy.ops.object.modifier_apply(modifier="Disp")
+
+    n_dense = len(obj.data.polygons)
+    dec = obj.modifiers.new("Decimate", "DECIMATE")
+    dec.decimate_type = "COLLAPSE"
+    dec.ratio = max(0.02, min(1.0, collapse_faces / float(max(1, n_dense))))
+    bpy.ops.object.modifier_apply(modifier="Decimate")
+
+    mesh = obj.data
+    sit_on_ground(mesh)
+    for p in mesh.polygons:
+        p.use_smooth = False
+        p.select = p.area > FRACTAL_AREA
+    for v in mesh.vertices:
+        v.select = False
+    for e in mesh.edges:
+        e.select = False
+
+    bpy.ops.object.mode_set(mode="EDIT")
+    bpy.ops.mesh.subdivide(
+        number_cuts=1,
+        fractal=fractal,
+        fractal_along_normal=FRACTAL_NORMAL,
+        seed=FRACTAL_SEED,
     )
+    bpy.ops.mesh.quads_convert_to_tris(quad_method="BEAUTY", ngon_method="BEAUTY")
+    bpy.ops.object.mode_set(mode="OBJECT")
 
-    bm.normal_update()
-    rng = random.Random(seed)
-    if jitter > 0:
-        for v in bm.verts:
-            n = v.normal.copy()
-            if n.length < 1e-8:
-                continue
-            n.normalize()
-            v.co += n * rng.uniform(-jitter, jitter)
-            if v.co.z < 0.02:
-                v.co.z = 0.0
-
-    minz = min(v.co.z for v in bm.verts)
-    for v in bm.verts:
-        v.co.z -= minz
-    bmesh.ops.triangulate(bm, faces=bm.faces[:], quad_method="BEAUTY", ngon_method="BEAUTY")
-    for f in bm.faces:
-        f.smooth = False
-    bm.to_mesh(mesh)
-    bm.free()
-    mesh.update()
-
+    sit_on_ground(mesh)
+    for p in mesh.polygons:
+        p.use_smooth = False
+        p.select = False
+    mesh.materials.clear()
     mesh.materials.append(flat_mat("Mat_Hedge", color))
     obj.location = (0.0, 0.0, 0.0)
     return obj
@@ -125,7 +157,7 @@ def main():
         "verts": len(obj.data.vertices),
         "faces": len(obj.data.polygons),
         "materials": [m.name for m in obj.data.materials],
-        "path_note": "parameterized; tune LENGTH/WIDTH/HEIGHT/CORNER/JITTER",
+        "path_note": "procedure knobs; look ~292v/521f irregular tris",
     })
 
 

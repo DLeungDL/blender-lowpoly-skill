@@ -76,12 +76,12 @@ metadata:
 
 反推（reverse-eng）減面後的 AI mesh 是**知識蒸餾（knowledge distillation）**，不是逐頂點複製。
 
-- 提煉 DNA：比例、基本體、圓角、單色、原點。出貨**參數化** bpy（`length`、`width`、`height`、`corner`、`jitter`）。
-- **不要** subsurf + collapse + fractal 去還原無序三角。那是在複製雜訊。
-- 外觀對照 mesh（521 面不規則樹籬）只給四視圖比對。做法是 [hedge.py](references/scripts/hedge.py)。
+- DNA 是**帶旋鈕的流程**（parameterized procedure），不是頂點陣列，也不是「還讀得出來的最乾淨 CAD 方塊」。
+- 這棵樹籬的樣子*就是*不規則三角。旋鈕包含 `collapse_faces` 和 `fractal`。只 bevel 的方塊太乾淨。
+- 仍然**不要**倒 GLB 頂點。[hedge.py](references/scripts/hedge.py) 用旋鈕重建（約 292 verts／521 faces）。
 - 和馬同一條：Idle 逐頂點倒本用來對結果，不是做法。
 
-樹籬 DNA：一個方塊，縮放約 2.8 × 0.95 × 1.1，bevel 圓角 0.2／3 段，沿法線小幅 jitter，三角化，一個 sage 槽 `(0.40, 0.46, 0.28)`，Shade Flat，無 UV，原點 `(0,0,0)`，底在 Z=0。
+樹籬 DNA：方塊縮放約 2.8 × 0.95 × 1.1，bevel 0.2／4 段，subsurf 2，displace 0.028，collapse 到約 200 面，大面 fractal 0.28，sage `(0.40, 0.46, 0.28)`，Shade Flat，無 UV，原點 `(0,0,0)`，底在 Z=0。
 
 ## 四視圖檢查（必做）
 

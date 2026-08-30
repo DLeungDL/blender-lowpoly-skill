@@ -79,6 +79,6 @@ Also inspected (no reconstruction script): compact Llama, Pug, Zebra.
 
 | Script | DNA | Knobs |
 |---|---|---|
-| `hedge.py` | rounded oblong, 1 sage slot, Shade Flat | length, width, height, corner, segments, jitter |
+| `hedge.py` | irregular-tri rounded oblong, 1 sage slot | length, width, height, corner, subsurf, displace, collapse_faces, fractal |
 
-Hedge is parameterized geometry, not a GLB vertex clone. Do not subsurf+collapse to copy a decimated AI mesh.
+Hedge is a parameterized *procedure* (not a GLB vertex clone). Collapse/fractal are knobs because the look is irregular tris.
